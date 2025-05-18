@@ -8,7 +8,12 @@ This repository provides a simple Flask-based API for detecting hand gestures in
 
 - The API accepts an image in **base64** format via a POST request to the `/draw` endpoint.
 - It processes the image using **MediaPipe Hands** to detect hand landmarks.
-- Based on finger positions, it interprets gestures to draw, erase, change color, pause, or clear the canvas.
+- Based on finger positions, it interprets gestures to:
+  - **Draw** with one finger up
+  - **Erase** with two fingers up
+  - **Change color** with all five fingers up
+  - **Pause drawing** with a closed fist
+  - **Clear the canvas** with the thumb up
 - The processed image is returned as a base64-encoded JPEG to be displayed or further used.
 
 ---
@@ -31,76 +36,77 @@ This repository provides a simple Flask-based API for detecting hand gestures in
    ```bash
    git clone <your-repo-url>
    cd <repo-folder>
+   ```
 
+2. Create a virtual environment and activate it (optional but recommended):
 
-Create a virtual environment and activate it (optional but recommended):
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+3. Install required libraries:
 
+   ```bash
+   pip install -r requirements.txt
+   ```
 
+   Or install dependencies manually:
 
+   ```bash
+   pip install flask flask-cors opencv-python mediapipe numpy
+   ```
 
-Install required libraries:
+4. Run the Flask app:
 
-pip install -r requirements.txt
+   ```bash
+   python app.py
+   ```
 
+   The server will start on port `8080` by default.
 
-Or install dependencies manually:
+---
 
-pip install flask flask-cors opencv-python mediapipe numpy
+## Usage Example
 
+Send a POST request to `/draw` with a JSON payload containing the base64 image string:
 
-Run the Flask app:
-
-python app.py
-
-
-Usage Example
-Send a POST request to /draw with a JSON payload containing the base64 image string:
-
+```json
 {
   "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
 }
-
+```
 
 The response will contain:
 
+```json
 {
   "result_image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
 }
+```
 
+---
 
-Libraries Used
-Flask – Lightweight web framework for Python API.
+## Libraries Used
 
-Flask-CORS – Enables Cross-Origin Resource Sharing for API requests.
+- **Flask** – Lightweight web framework for Python API.
+- **Flask-CORS** – Enables Cross-Origin Resource Sharing for API requests.
+- **OpenCV (cv2)** – Image processing and manipulation.
+- **MediaPipe** – For hand landmark detection and gesture recognition.
+- **NumPy** – Array manipulation.
 
-OpenCV (cv2) – Image processing and manipulation.
+---
 
-MediaPipe – For hand landmark detection and gesture recognition.
+## Important Notes
 
-NumPy – Array manipulation.
+- The app maintains a global drawing canvas and state, so it is designed for continuous use per session.
+- For multi-user or production environments, consider adding session management and thread safety.
+- Base64-encoded images can be large; optimize client image size before sending.
 
+---
 
+## Stay Updated
 
+Visit [eaigles.com](https://eaigles.com) – the visionary platform for more updates, innovations, and AI-powered tools.
 
-
-Important Notes
-The app maintains a global drawing canvas and state, so it is designed for continuous use per session.
-
-For multi-user or production environments, consider adding session management and thread safety.
-
-Base64-encoded images can be large; optimize client image size before sending.
-
-
-
-Stay Updated
-Visit eaigles.com – the visionary platform for more updates, innovations, and AI-powered tools.
-
-
-
-
-
-
-
+---
